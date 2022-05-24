@@ -1,13 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import RadioCategory from './Components/RadioCategory';
+import { getCategories } from './services/api';
 
 class ProductList extends React.Component {
   state = {
     productList: [],
+    categoriesList: [],
+  }
+
+  componentDidMount() {
+    this.listCategories();
+  }
+
+  listCategories = async () => {
+    const resultFetchCategories = await getCategories();
+    this.setState({
+      categoriesList: [...resultFetchCategories],
+    });
   }
 
   render() {
-    const { productList } = this.state;
+    const { productList, categoriesList } = this.state;
     return (
       <div>
         <input type="text" />
@@ -18,6 +32,11 @@ class ProductList extends React.Component {
           <p data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </p>)}
+
+        {categoriesList.map((category) => (<RadioCategory
+          key={ category.id }
+          categoryName={ category.name }
+        />))}
       </div>
     );
   }
