@@ -9,7 +9,6 @@ class Cart extends React.Component {
     const { arrayVazio } = this.state;
     return (
       <div>
-
         {arrayVazio.length === 0 && (
           <p data-testid="shopping-cart-empty-message">
             Seu carrinho está vazio
