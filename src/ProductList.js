@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery, getCategories } from './services/api';
 import RadioCategory from './Components/RadioCategory';
 
@@ -59,6 +60,9 @@ class ProductList extends React.Component {
         >
           Buscar
         </button>
+        <Link data-testid="shopping-cart-button" to="/cart">
+          <button type="button">Carrinho</button>
+        </Link>
         {isEmpty === null ? (
           <p data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
