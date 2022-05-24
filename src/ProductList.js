@@ -1,5 +1,6 @@
 import React from 'react';
-import { getProductsFromCategoryAndQuery } from './services/api';
+import { getProductsFromCategoryAndQuery, getCategories } from './services/api';
+import RadioCategory from './Components/RadioCategory';
 
 class ProductList extends React.Component {
   state = {
@@ -7,6 +8,18 @@ class ProductList extends React.Component {
     inputValue: '',
     isEmpty: null,
     isDisabled: true,
+    categoriesList: [],
+  }
+
+  componentDidMount() {
+    this.listCategories();
+  }
+
+  listCategories = async () => {
+    const resultFetchCategories = await getCategories();
+    this.setState({
+      categoriesList: [...resultFetchCategories],
+    });
   }
 
   handleChange = ({ target }) => {
@@ -29,7 +42,7 @@ class ProductList extends React.Component {
   }
 
   render() {
-    const { productList, inputValue, isEmpty, isDisabled } = this.state;
+    const { productList, inputValue, isEmpty, isDisabled, categoriesList } = this.state;
     return (
       <div>
         <input
@@ -63,8 +76,13 @@ class ProductList extends React.Component {
                     </div>
                   ))
               }
+
             </div>
           )}
+        {categoriesList.map((category) => (<RadioCategory
+          key={ category.id }
+          categoryName={ category.name }
+        />))}
       </div>
     );
   }
