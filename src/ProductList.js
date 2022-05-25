@@ -18,7 +18,6 @@ class ProductList extends React.Component {
 
   listCategories = async () => {
     const resultFetchCategories = await getCategories();
-    console.log(resultFetchCategories);
     this.setState({
       categoriesList: [...resultFetchCategories],
     });
@@ -82,9 +81,11 @@ class ProductList extends React.Component {
                 isEmpty === true ? (<p>Nenhum produto foi encontrado</p>)
                   : productList.map(({ title, thumbnail, price, id }) => (
                     <div data-testid="product" key={ id }>
-                      <img src={ thumbnail } alt={ title } />
-                      <p>{ title }</p>
-                      <p>{ `R$${price}` }</p>
+                      <Link data-testid="product-detail-link" to={ `/product/${id}` }>
+                        <img src={ thumbnail } alt={ title } />
+                        <p>{ title }</p>
+                        <p>{ `R$${price}` }</p>
+                      </Link>
                       <button type="button">Adicionar ao Carrinho</button>
                     </div>
                   ))
