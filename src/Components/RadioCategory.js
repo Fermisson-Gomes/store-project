@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 export default class RadioCategory extends React.Component {
   render() {
     const { categoryName, categoryId, getCategoriesFromId } = this.props;
-    console.log(categoryName);
     return (
       <label htmlFor="category">
         <input

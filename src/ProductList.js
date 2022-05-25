@@ -18,7 +18,6 @@ class ProductList extends React.Component {
 
   listCategories = async () => {
     const resultFetchCategories = await getCategories();
-    console.log(resultFetchCategories);
     this.setState({
       categoriesList: [...resultFetchCategories],
     });
