@@ -18,6 +18,7 @@ class ProductList extends React.Component {
 
   listCategories = async () => {
     const resultFetchCategories = await getCategories();
+    console.log(resultFetchCategories);
     this.setState({
       categoriesList: [...resultFetchCategories],
     });
@@ -40,6 +41,14 @@ class ProductList extends React.Component {
     } else {
       this.setState({ productList: response.results, isEmpty: false });
     }
+  }
+
+  getCategoriesFromId = async (value) => {
+    const response = await getProductsFromCategoryAndQuery(value, null);
+    this.setState(
+      { isEmpty: false,
+        productList: response.results },
+    );
   }
 
   render() {
@@ -86,6 +95,8 @@ class ProductList extends React.Component {
         {categoriesList.map((category) => (<RadioCategory
           key={ category.id }
           categoryName={ category.name }
+          categoryId={ category.id }
+          getCategoriesFromId={ this.getCategoriesFromId }
         />))}
       </div>
     );
