@@ -109,7 +109,10 @@ class ProductList extends React.Component {
                 isEmpty === true ? (<p>Nenhum produto foi encontrado</p>)
                   : productList.map((product) => (
                     <div data-testid="product" key={ product.id }>
-                      <Link data-testid="product-detail-link" to={ `/product/${product.id}` }>
+                      <Link
+                        data-testid="product-detail-link"
+                        to={ `/product/${product.id}` }
+                      >
                         <img src={ product.thumbnail } alt={ product.title } />
                         <p>{ product.title }</p>
                         <p>{ `R$${product.price}` }</p>
