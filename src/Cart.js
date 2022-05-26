@@ -9,9 +9,37 @@ class Cart extends React.Component {
     this.getItemsFromLocalStorage();
   }
 
+  quantityHandler = (event, operacao) => {
+    const { name } = event.target;
+    const { cartArray } = this.state;
+    let quantity = localStorage.getItem(name);
+    if (parseInt(quantity, 10) === 1 && operacao === 'menos') {
+      return false;
+    }
+    if (operacao === 'mais') {
+      quantity = parseInt(quantity, 10) + 1;
+    } if (operacao === 'menos') {
+      quantity = parseInt(quantity, 10) - 1;
+    }
+    localStorage.setItem(name, quantity);
+    const cartMap = cartArray.map((produto) => {
+      if (produto.id === name) {
+        produto.quantity = quantity;
+        return produto;
+      }
+      return produto;
+    });
+    this.setState({ cartArray: cartMap });
+  }
+
   getItemsFromLocalStorage = () => {
     const itemsList = JSON.parse(localStorage.getItem('cart'));
-    this.setState({ cartArray: [...itemsList] });
+    const novoArray = itemsList.map((item) => {
+      const quantidade = localStorage.getItem(item.id);
+      item.quantity = quantidade;
+      return item;
+    });
+    this.setState({ cartArray: novoArray });
   }
 
   render() {
@@ -26,15 +54,34 @@ class Cart extends React.Component {
           : (
             <div>
               {
-                cartArray.map(({ thumbnail, title, price, id }, i) => (
-                  <div key={ i }>
+                cartArray.map(({ thumbnail, title, price, quantity, id }, index) => (
+                  <div key={ index }>
                     <img src={ thumbnail } alt={ title } />
                     <p data-testid="shopping-cart-product-name">{ title }</p>
-                    <p>{ price }</p>
-                    <p
-                      data-testid="shopping-cart-product-quantity"
-                    >
-                      { localStorage.getItem(id) }
+                    <p>
+                      { `R$${price}` }
+                    </p>
+                    <p>
+                      <button
+                        type="button"
+                        name={ id }
+                        data-testid="product-decrease-quantity"
+                        onClick={ (event) => this.quantityHandler(event, 'menos') }
+                      >
+                        -
+
+                      </button>
+                      <span data-testid="shopping-cart-product-quantity">{quantity}</span>
+                      <button
+                        type="button"
+                        name={ id }
+                        data-testid="product-increase-quantity"
+                        onClick={ (event) => this.quantityHandler(event, 'mais') }
+                      >
+                        +
+
+                      </button>
+
                     </p>
                   </div>
                 ))
