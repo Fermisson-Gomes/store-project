@@ -25,13 +25,13 @@ class ProductList extends React.Component {
     this.setState(({ cartProducts }) => ({
       cartProducts: [...cartProducts, product],
     }), () => {
-      const { cartProducts } = this.state;
       const getFromLocalStorage = JSON.parse(localStorage.getItem('cart'));
-      if (getFromLocalStorage.includes(product.id)) {
+      if (getFromLocalStorage.some((item) => item.id === product.id)) {
         let count = Number(localStorage.getItem(product.id));
         localStorage.setItem(product.id, count += 1);
       } else {
-        localStorage.setItem('cart', JSON.stringify(cartProducts));
+        const novoArray = [...getFromLocalStorage, product];
+        localStorage.setItem('cart', JSON.stringify(novoArray));
         localStorage.setItem(product.id, 1);
       }
     });
