@@ -24,15 +24,17 @@ class ProductList extends React.Component {
     // const resultJSON = await resultFetch.json();
     this.setState(({ cartProducts }) => ({
       cartProducts: [...cartProducts, product],
-    }));
-    const { cartProducts } = this.state;
-    if (localStorage.getItem('cart').includes(product.id)) {
-      let count = Number(localStorage.getItem(product.id));
-      localStorage.setItem(product.id, count += 1);
-    } else {
-      localStorage.setItem('cart', JSON.stringify(cartProducts));
-      localStorage.setItem(id, 1);
-    }
+    }), () => {
+      const { cartProducts } = this.state;
+      const getFromLocalStorage = JSON.parse(localStorage.getItem('cart'));
+      if (getFromLocalStorage.includes(product.id)) {
+        let count = Number(localStorage.getItem(product.id));
+        localStorage.setItem(product.id, count += 1);
+      } else {
+        localStorage.setItem('cart', JSON.stringify(cartProducts));
+        localStorage.setItem(product.id, 1);
+      }
+    });
   }
 
   listCategories = async () => {
