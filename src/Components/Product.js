@@ -60,7 +60,14 @@ export default class Product extends React.Component {
           ))
         }
         <p>{ price }</p>
-        <button type="button" onClick={ () => this.handleClickAddCart(product) } data-testid="product-detail-add-to-cart">Adicionar ao carrinho</button>
+        <button
+          type="button"
+          onClick={ () => this.handleClickAddCart(product) }
+          data-testid="product-detail-add-to-cart"
+        >
+          Adicionar ao carrinho
+
+        </button>
       </div>
     );
   }
