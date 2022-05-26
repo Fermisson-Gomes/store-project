@@ -10,10 +10,31 @@ class ProductList extends React.Component {
     isEmpty: null,
     isDisabled: true,
     categoriesList: [],
+    cartProducts: [],
   }
 
   componentDidMount() {
+    if (localStorage.length === 0) localStorage.setItem('cart', '[]');
     this.listCategories();
+  }
+
+  handleClickAddCart = async (product) => {
+    // const url = `https://api.mercadolibre.com/items/${id}`;
+    // const resultFetch = await fetch(url);
+    // const resultJSON = await resultFetch.json();
+    this.setState(({ cartProducts }) => ({
+      cartProducts: [...cartProducts, product],
+    }), () => {
+      const { cartProducts } = this.state;
+      const getFromLocalStorage = JSON.parse(localStorage.getItem('cart'));
+      if (getFromLocalStorage.includes(product.id)) {
+        let count = Number(localStorage.getItem(product.id));
+        localStorage.setItem(product.id, count += 1);
+      } else {
+        localStorage.setItem('cart', JSON.stringify(cartProducts));
+        localStorage.setItem(product.id, 1);
+      }
+    });
   }
 
   listCategories = async () => {
@@ -51,7 +72,12 @@ class ProductList extends React.Component {
   }
 
   render() {
-    const { productList, inputValue, isEmpty, isDisabled, categoriesList } = this.state;
+    const {
+      productList,
+      inputValue,
+      isEmpty,
+      isDisabled,
+      categoriesList } = this.state;
     return (
       <div>
         <input
@@ -68,8 +94,10 @@ class ProductList extends React.Component {
         >
           Buscar
         </button>
-        <Link data-testid="shopping-cart-button" to="/cart">
-          <button type="button">Carrinho</button>
+        <Link
+          to="/cart"
+        >
+          <button data-testid="shopping-cart-button" type="button">Carrinho</button>
         </Link>
         {isEmpty === null ? (
           <p data-testid="home-initial-message">
@@ -79,14 +107,20 @@ class ProductList extends React.Component {
             <div>
               {
                 isEmpty === true ? (<p>Nenhum produto foi encontrado</p>)
-                  : productList.map(({ title, thumbnail, price, id }) => (
-                    <div data-testid="product" key={ id }>
-                      <Link data-testid="product-detail-link" to={ `/product/${id}` }>
-                        <img src={ thumbnail } alt={ title } />
-                        <p>{ title }</p>
-                        <p>{ `R$${price}` }</p>
+                  : productList.map((product) => (
+                    <div data-testid="product" key={ product.id }>
+                      <Link data-testid="product-detail-link" to={ `/product/${product.id}` }>
+                        <img src={ product.thumbnail } alt={ product.title } />
+                        <p>{ product.title }</p>
+                        <p>{ `R$${product.price}` }</p>
                       </Link>
-                      <button type="button">Adicionar ao Carrinho</button>
+                      <button
+                        type="button"
+                        onClick={ () => { this.handleClickAddCart(product); } }
+                        data-testid="product-add-to-cart"
+                      >
+                        Adicionar ao Carrinho
+                      </button>
                     </div>
                   ))
               }
