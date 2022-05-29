@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 
 export default class ProductReviewCard extends React.Component {
   render() {
@@ -49,3 +50,7 @@ export default class ProductReviewCard extends React.Component {
     );
   }
 }
+
+ProductReviewCard.propTypes = {
+  user: PropTypes.shape.isRequired,
+};

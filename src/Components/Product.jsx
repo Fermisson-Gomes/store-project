@@ -71,7 +71,10 @@ export default class Product extends React.Component {
     };
 
     const getFromLocalStorage = JSON.parse(localStorage.getItem('userReview'));
-    localStorage.setItem('userReview', JSON.stringify([...getFromLocalStorage, userReviewObj]));
+
+    localStorage.setItem('userReview', JSON.stringify([...getFromLocalStorage,
+      userReviewObj]));
+
     this.setState((prevState) => ({
       userReview: [...prevState.userReview, userReviewObj],
     }));
