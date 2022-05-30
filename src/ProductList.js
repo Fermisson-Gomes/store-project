@@ -11,11 +11,13 @@ class ProductList extends React.Component {
     isDisabled: true,
     categoriesList: [],
     cartProducts: [],
+    productsCount: 0,
   }
 
   componentDidMount() {
     if (localStorage.length === 0) localStorage.setItem('cart', '[]');
     this.listCategories();
+    this.getNumberInCart();
   }
 
   handleClickAddCart = async (product) => {
@@ -34,7 +36,19 @@ class ProductList extends React.Component {
         localStorage.setItem('cart', JSON.stringify(novoArray));
         localStorage.setItem(product.id, 1);
       }
+      this.getNumberInCart();
     });
+  }
+
+  getNumberInCart() {
+    const getFromLocalStorage = JSON.parse(localStorage.getItem('cart'));
+    const products = getFromLocalStorage.map((item) => item.id);
+    let soma = 0;
+    products.forEach((product) => {
+      const number = Number(localStorage.getItem(product));
+      soma += number;
+    });
+    this.setState({ productsCount: soma });
   }
 
   listCategories = async () => {
@@ -74,6 +88,7 @@ class ProductList extends React.Component {
   render() {
     const {
       productList,
+      productsCount,
       inputValue,
       isEmpty,
       isDisabled,
@@ -94,6 +109,9 @@ class ProductList extends React.Component {
         >
           Buscar
         </button>
+        <span data-testid="shopping-cart-size">
+          { productsCount }
+        </span>
         <Link
           to="/cart"
         >
@@ -124,6 +142,8 @@ class ProductList extends React.Component {
                       >
                         Adicionar ao Carrinho
                       </button>
+                      {product.shipping.free_shipping
+                      && <p data-testid="free-shipping">frete gratis</p>}
                     </div>
                   ))
               }

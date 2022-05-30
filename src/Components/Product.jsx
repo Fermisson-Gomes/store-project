@@ -9,13 +9,27 @@ export default class Product extends React.Component {
     pictures: [],
     cartProducts: [],
     userReview: [],
+    freeShipping: false,
+    productsCount: 0,
   }
 
   componentDidMount = async () => {
     if (!localStorage.getItem('userReview')) localStorage.setItem('userReview', '[]');
     const { match: { params: { id } } } = this.props;
     this.getUserReviewFromLs();
+    this.getNumberInCart();
     await this.getProductById(id);
+  }
+
+  getNumberInCart() {
+    const getFromLocalStorage = JSON.parse(localStorage.getItem('cart'));
+    const products = getFromLocalStorage.map((item) => item.id);
+    let soma = 0;
+    products.forEach((product) => {
+      const number = Number(localStorage.getItem(product));
+      soma += number;
+    });
+    this.setState({ productsCount: soma });
   }
 
   getUserReviewFromLs = () => {
@@ -29,7 +43,9 @@ export default class Product extends React.Component {
     const url = `https://api.mercadolibre.com/items/${id}`;
     const resultFetch = await fetch(url);
     const resultJSON = await resultFetch.json();
-    this.setState({ product: resultJSON, pictures: resultJSON.pictures });
+    this.setState({ product: resultJSON,
+      pictures: resultJSON.pictures,
+      freeShipping: resultJSON.shipping.free_shipping });
   }
 
   handleClickAddCart = async (product) => {
@@ -51,6 +67,7 @@ export default class Product extends React.Component {
         localStorage.setItem('cart', JSON.stringify(newArrayProducts));
         localStorage.setItem(product.id, 1);
       }
+      this.getNumberInCart();
     });
   }
 
@@ -82,9 +99,13 @@ export default class Product extends React.Component {
 
   render() {
     const { product: { title, price }, pictures } = this.state;
-    const { product, userReview } = this.state;
+    const { product, userReview, freeShipping } = this.state;
+    const { productsCount } = this.state;
     return (
       <div>
+        <span data-testid="shopping-cart-size">
+          { productsCount }
+        </span>
         <Link
           to="/cart"
         >
@@ -105,6 +126,8 @@ export default class Product extends React.Component {
           Adicionar ao carrinho
 
         </button>
+
+        {freeShipping && <p data-testid="free-shipping">frete gratis</p>}
 
         <form>
           <label htmlFor="email">
