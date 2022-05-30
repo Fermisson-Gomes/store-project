@@ -124,6 +124,8 @@ class ProductList extends React.Component {
                       >
                         Adicionar ao Carrinho
                       </button>
+                      {product.shipping.free_shipping
+                      && <p data-testid="free-shipping">frete gratis</p>}
                     </div>
                   ))
               }
