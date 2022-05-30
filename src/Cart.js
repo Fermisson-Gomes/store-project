@@ -58,7 +58,8 @@ class Cart extends React.Component {
             <div>
               {
                 cartArray.map((
-                  { thumbnail, title, price, quantity, id, available_quantity },
+                  { thumbnail, title, price, quantity, id,
+                    available_quantity: quantidadeDisponivel },
                   index,
                 ) => (
                   <div key={ index }>
@@ -73,7 +74,7 @@ class Cart extends React.Component {
                         name={ id }
                         data-testid="product-decrease-quantity"
                         onClick={ (event) => {
-                          this.quantityHandler(event, 'menos', available_quantity);
+                          this.quantityHandler(event, 'menos', quantidadeDisponivel);
                         } }
                       >
                         -
@@ -85,7 +86,7 @@ class Cart extends React.Component {
                         name={ id }
                         data-testid="product-increase-quantity"
                         onClick={ (event) => {
-                          this.quantityHandler(event, 'mais', available_quantity);
+                          this.quantityHandler(event, 'mais', quantidadeDisponivel);
                         } }
                       >
                         +
