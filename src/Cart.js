@@ -9,11 +9,14 @@ class Cart extends React.Component {
     this.getItemsFromLocalStorage();
   }
 
-  quantityHandler = (event, operacao) => {
+  quantityHandler = (event, operacao, quantidadeMax) => {
     const { name } = event.target;
     const { cartArray } = this.state;
     let quantity = localStorage.getItem(name);
     if (parseInt(quantity, 10) === 1 && operacao === 'menos') {
+      return false;
+    }
+    if (parseInt(quantity, 10) === parseInt(quantidadeMax, 10) && operacao === 'mais') {
       return false;
     }
     if (operacao === 'mais') {
@@ -54,7 +57,10 @@ class Cart extends React.Component {
           : (
             <div>
               {
-                cartArray.map(({ thumbnail, title, price, quantity, id }, index) => (
+                cartArray.map((
+                  { thumbnail, title, price, quantity, id, available_quantity },
+                  index,
+                ) => (
                   <div key={ index }>
                     <img src={ thumbnail } alt={ title } />
                     <p data-testid="shopping-cart-product-name">{ title }</p>
@@ -66,7 +72,9 @@ class Cart extends React.Component {
                         type="button"
                         name={ id }
                         data-testid="product-decrease-quantity"
-                        onClick={ (event) => this.quantityHandler(event, 'menos') }
+                        onClick={ (event) => {
+                          this.quantityHandler(event, 'menos', available_quantity);
+                        } }
                       >
                         -
 
@@ -76,7 +84,9 @@ class Cart extends React.Component {
                         type="button"
                         name={ id }
                         data-testid="product-increase-quantity"
-                        onClick={ (event) => this.quantityHandler(event, 'mais') }
+                        onClick={ (event) => {
+                          this.quantityHandler(event, 'mais', available_quantity);
+                        } }
                       >
                         +
 
