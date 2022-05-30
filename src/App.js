@@ -4,6 +4,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import ProductList from './ProductList';
 import Cart from './Cart';
 import Product from './Components/Product';
+import BuyForm from './Components/BuyForm';
 
 class App extends React.Component {
   render() {
@@ -17,6 +18,7 @@ class App extends React.Component {
           />
           <Route path="/cart" component={ Cart } />
           <Route path="/Product/:id" component={ Product } />
+          <Route path="/buyForm" component={ BuyForm } />
         </BrowserRouter>
       </div>
     );
