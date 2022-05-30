@@ -9,6 +9,7 @@ export default class Product extends React.Component {
     pictures: [],
     cartProducts: [],
     userReview: [],
+    freeShipping: false,
     productsCount: 0,
   }
 
@@ -42,7 +43,9 @@ export default class Product extends React.Component {
     const url = `https://api.mercadolibre.com/items/${id}`;
     const resultFetch = await fetch(url);
     const resultJSON = await resultFetch.json();
-    this.setState({ product: resultJSON, pictures: resultJSON.pictures });
+    this.setState({ product: resultJSON,
+      pictures: resultJSON.pictures,
+      freeShipping: resultJSON.shipping.free_shipping });
   }
 
   handleClickAddCart = async (product) => {
@@ -96,7 +99,7 @@ export default class Product extends React.Component {
 
   render() {
     const { product: { title, price }, pictures } = this.state;
-    const { product, userReview } = this.state;
+    const { product, userReview, freeShipping } = this.state;
     const { productsCount } = this.state;
     return (
       <div>
@@ -123,6 +126,8 @@ export default class Product extends React.Component {
           Adicionar ao carrinho
 
         </button>
+
+        {freeShipping && <p data-testid="free-shipping">frete gratis</p>}
 
         <form>
           <label htmlFor="email">
