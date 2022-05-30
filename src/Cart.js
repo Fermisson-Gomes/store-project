@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class Cart extends React.Component {
   state = {
@@ -56,6 +57,7 @@ class Cart extends React.Component {
         )
           : (
             <div>
+              <Link data-testid="checkout-products" to="/buyForm">Finalizar Compra</Link>
               {
                 cartArray.map((
                   { thumbnail, title, price, quantity, id,
